@@ -1,10 +1,14 @@
-import './styles/index.css'
+import { Routes, Route } from 'react-router-dom'
+import LandingPage from './pages/landing'
+import LoginPage from './pages/login'
+import './styles/global.css'
 
 function App() {
   return (
-    <>
-      <div className='text-3xl font-bold underline'> Test </div>
-    </>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<LoginPage />} />
+    </Routes>
   )
 }
 
