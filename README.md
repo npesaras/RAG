@@ -1,1 +1,3 @@
 # Web-based Retrieval Augemented Generation (RAG) Application for College of Computer Studies at MSU-IIT
+
+This repository contains a web-based Retrieval-Augmented Generation (RAG) application developed for the College of Computer Studies at Mindanao State University – Iligan Institute of Technology (MSU‑IIT). The system combines fast document retrieval with advanced natural language generation to deliver accurate, context-aware answers grounded in the college’s materials. Users can ask questions in plain language and receive concise explanations and summaries that reflect relevant content, helping students, faculty, and staff find information quickly.
