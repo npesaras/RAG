@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "ritwickdey.LiveServer", 
+        "esbenp.prettier-vscode", 
+        "streetsidesoftware.code-spell-checker",
+        "christian-kohler.npm-intellisense",
+        "dbaeumer.vscode-eslint",
+        "oderwat.indent-rainbow",
+        "bradlc.vscode-tailwindcss",
+        "dsznajder.es7-react-js-snippets",
+        "aaron-bond.better-comments"
+    ] 
+}
