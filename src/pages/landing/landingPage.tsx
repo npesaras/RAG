@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router"
 
 export default function LandingPage() {
   const navigate = useNavigate()
@@ -80,16 +80,13 @@ export default function LandingPage() {
       {/* Hero Section */}
       <main id="home" className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <h1 className="text-6xl font-bold text-foreground leading-tight">
-            Web-based{" "}
-            <span className="text-primary">Retrieval Augmented Generation</span>{" "}
-            Application
+          <h1 className="text-5xl font-bold text-foreground leading-tight">
+            Intelligent Search,{" "}
+            <span className="text-primary">Built for MSU-IIT CCS</span>{" "}
+            Students
           </h1>
-          
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            For the College of Computer Studies at Mindanao State University – 
-            Iligan Institute of Technology (MSU‑IIT). Get accurate, context-aware 
-            answers grounded in college materials.
+            A sophisticated web application powered by Retrieval-Augmented Generation (RAG).
           </p>
 
           <div className="flex gap-4 justify-center mt-8">
