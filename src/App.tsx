@@ -1,13 +1,18 @@
-import { Routes, Route } from 'react-router-dom'
-import LandingPage from './pages/landing'
-import LoginPage from './pages/login'
+import { Routes, Route } from 'react-router'
+import LandingPage from './pages/landing/landingPage'
+import LoginPage from './pages/login/loginPage'
+import OnboardingPage from './pages/onboarding/onboardingPage'
+import DashboardPage from './pages/dashboard/dashboardPage'
+import { ROUTES } from './lib/constants'
 import './styles/global.css'
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route path={ROUTES.HOME} element={<LandingPage />} />
+      <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+      <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
+      <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
     </Routes>
   )
 }
