@@ -1,15 +1,15 @@
-// User Schema and Types for Appwrite Integration
+// User Schema and Types
 
-// Base User interface matching Appwrite users collection schema
+// Base User interface
 export interface User {
-  $id?: string; // Appwrite document ID (optional for creation)
-  $createdAt?: string; // Appwrite timestamp
-  $updatedAt?: string; // Appwrite timestamp
-  name: string; // User's full name from Google profile
-  email: string; // User's email address from Google profile
+  id?: string; // User ID (optional for creation)
+  createdAt?: string; // Creation timestamp
+  updatedAt?: string; // Update timestamp
+  name: string; // User's full name
+  email: string; // User's email address
 }
 
-// User creation payload (without Appwrite system fields)
+// User creation payload
 export interface CreateUserPayload {
   name: string;
   email: string;
@@ -21,12 +21,12 @@ export interface UpdateUserPayload {
   email?: string;
 }
 
-// Google OAuth user profile data structure
-export interface GoogleUserProfile {
+// Authentication user profile data structure
+export interface AuthUserProfile {
   name: string;
   email: string;
   picture?: string; // Profile picture URL (optional)
-  sub: string; // Google user ID
+  sub: string; // User ID
 }
 
 // User operation response types
@@ -64,8 +64,8 @@ export const validateUserPayload = (payload: CreateUserPayload): { isValid: bool
   };
 };
 
-// Helper function to transform Google profile to our user schema
-export const transformGoogleProfile = (profile: GoogleUserProfile): CreateUserPayload => {
+// Helper function to transform auth profile to our user schema
+export const transformAuthProfile = (profile: AuthUserProfile): CreateUserPayload => {
   return {
     name: profile.name.trim(),
     email: profile.email.toLowerCase().trim()

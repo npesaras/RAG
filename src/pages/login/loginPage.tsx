@@ -1,9 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router"
 import { ROUTES } from "@/lib/constants"
-import { useAuthSession } from "@/hooks/useAuthSession"
-import { authenticateWithGoogle } from "@/lib/authentication/authSession"
-import { handleUserAfterAuth } from "@/lib/authentication/userService"
 import { useState } from "react"
 import communicationSvg from "@/assets/communication.svg"
 
@@ -32,54 +29,15 @@ const GoogleIcon = () => (
 // Login Page Component
 export default function LoginPage() {
   const navigate = useNavigate()
-  const [isAuthenticating, setIsAuthenticating] = useState(false)
   const [authError, setAuthError] = useState<string | null>(null)
-  
-  // Check authentication session - redirect to dashboard if already logged in
-  const { loading } = useAuthSession(true)
 
-  const handleGoogleLogin = async () => {
-    try {
-      setIsAuthenticating(true)
-      setAuthError(null)
-      
-      // Initiate Google authentication
-      const authResult = await authenticateWithGoogle()
-      
-      if (authResult.success && authResult.user) {
-        // User is already authenticated, save profile and redirect
-        const userResult = await handleUserAfterAuth()
-        
-        if (userResult.success) {
-          navigate(ROUTES.DASHBOARD)
-        } else {
-          setAuthError(userResult.error || 'Failed to save user profile')
-        }
-      } else {
-        // This will redirect to Google OAuth, so we don't need to handle the "redirecting" case
-        // The page will reload after OAuth flow
-      }
-    } catch (error) {
-      setAuthError('Authentication failed. Please try again.')
-      console.error('Google authentication error:', error)
-    } finally {
-      setIsAuthenticating(false)
-    }
+  const handleLogin = async () => {
+    // TODO: Implement authentication logic
+    setAuthError('Authentication not yet implemented')
   }
 
   const handleBackToHome = () => {
     navigate(ROUTES.HOME)
-  }
-
-  // Show loading while checking session
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-lg">Checking authentication...</div>
-        </div>
-      </div>
-    )
   }
 
   // If user is authenticated, they will be redirected by the hook
@@ -105,14 +63,13 @@ export default function LoginPage() {
             )}
             
             <Button 
-              onClick={handleGoogleLogin}
+              onClick={handleLogin}
               variant="outline"
               size="lg"
               className="w-full h-12 text-base"
-              disabled={isAuthenticating || loading}
             >
               <GoogleIcon />
-              {isAuthenticating ? 'Authenticating...' : 'Continue with Google'}
+              Continue with Google
             </Button>
 
             <Button 
@@ -120,7 +77,6 @@ export default function LoginPage() {
               variant="ghost"
               size="lg"
               className="w-full"
-              disabled={isAuthenticating}
             >
               Back to Home
             </Button>
