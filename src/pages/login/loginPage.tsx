@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router"
 import { ROUTES } from "@/lib/constants"
-import { useAuthSession } from "@/hooks/useAuthSession"
+import { useState } from "react"
 import communicationSvg from "@/assets/communication.svg"
 
 // Google Icon Component
@@ -29,30 +29,15 @@ const GoogleIcon = () => (
 // Login Page Component
 export default function LoginPage() {
   const navigate = useNavigate()
-  
-  // Check authentication session - redirect to dashboard if already logged in
-  const { loading } = useAuthSession(true)
+  const [authError, setAuthError] = useState<string | null>(null)
 
-  const handleGoogleLogin = async () => {
-    // TODO: Implement Google authentication
-    console.log("Google login clicked")
-    // For now, navigate directly to dashboard
-    navigate(ROUTES.DASHBOARD)
+  const handleLogin = async () => {
+    // TODO: Implement authentication logic
+    setAuthError('Authentication not yet implemented')
   }
 
   const handleBackToHome = () => {
     navigate(ROUTES.HOME)
-  }
-
-  // Show loading while checking session
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-lg">Checking authentication...</div>
-        </div>
-      </div>
-    )
   }
 
   // If user is authenticated, they will be redirected by the hook
@@ -71,8 +56,14 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-4">
+            {authError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                {authError}
+              </div>
+            )}
+            
             <Button 
-              onClick={handleGoogleLogin}
+              onClick={handleLogin}
               variant="outline"
               size="lg"
               className="w-full h-12 text-base"

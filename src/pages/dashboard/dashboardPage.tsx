@@ -73,6 +73,7 @@ export default function DashboardPage() {
   
   // Get main content based on current route
   const getMainContent = () => {
+
     switch (location.pathname) {
       case ROUTES.ARTICLES:
         return (
