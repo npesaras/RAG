@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router"
+import { ROUTES } from "@/lib/constants"
 
 export default function LandingPage() {
   const navigate = useNavigate()
 
   const handleLoginClick = () => {
-    navigate("/login")
+    navigate(ROUTES.LOGIN)
   }
 
   const scrollToSection = (sectionId: string) => {
