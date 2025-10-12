@@ -22,6 +22,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { UserAccountDropdown } from "./UserAccountDropdown"
 
 // Menu items for the sidebar
 const navigationItems = [
@@ -122,6 +123,9 @@ export function SidebarNavigation() {
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
+          <SidebarMenuItem>
+            <UserAccountDropdown />
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>

@@ -53,7 +53,11 @@ export function DashboardContent() {
           </div>
         )
       default:
-        return <DashboardOverview />
+        return (
+          <div className="space-y-6">
+            <DashboardOverview />
+          </div>
+        )
     }
   }
 
