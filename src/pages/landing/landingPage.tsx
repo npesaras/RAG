@@ -100,41 +100,85 @@ export default function LandingPage() {
           </div>
 
           {/* Features */}
-          <div id="features" className="grid md:grid-cols-3 gap-8 mt-16 text-left">
-            <div className="space-y-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
+          <div id="features" className="grid md:grid-cols-2 gap-6 mt-16">
+            {/* 24/7 Chat Assistant */}
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-xl p-6 border border-purple-200 dark:border-purple-800">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold text-purple-900 dark:text-purple-100">24/7 Chat Assistant</h3>
+                  <p className="text-purple-700 dark:text-purple-300 text-sm leading-relaxed">
+                    Get instant answers to your questions anytime. Our AI assistant is available round the clock to help with coursework, campus information, and academic guidance.
+                  </p>
+                  <div className="text-purple-600 dark:text-purple-400 text-sm font-medium">
+                    Start chatting →
+                  </div>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold">Fast Retrieval</h3>
-              <p className="text-muted-foreground">
-                Quick document retrieval with advanced natural language processing
-              </p>
             </div>
 
-            <div className="space-y-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
+            {/* Download College Prospectus */}
+            <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-xl p-6 border border-orange-200 dark:border-orange-800">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold text-orange-900 dark:text-orange-100">Download College Prospectus</h3>
+                  <p className="text-orange-700 dark:text-orange-300 text-sm leading-relaxed">
+                    Access comprehensive college brochures, course catalogs, and program details. Download official prospectuses for all CCS programs and departments.
+                  </p>
+                  <div className="text-orange-600 dark:text-orange-400 text-sm font-medium">
+                    Browse downloads →
+                  </div>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold">Smart Generation</h3>
-              <p className="text-muted-foreground">
-                AI-powered answers that reflect relevant content accurately
-              </p>
             </div>
 
-            <div className="space-y-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
+            {/* Browse Professors Directory */}
+            <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl p-6 border border-green-200 dark:border-green-800">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold text-green-900 dark:text-green-100">Browse Professors Directory</h3>
+                  <p className="text-green-700 dark:text-green-300 text-sm leading-relaxed">
+                    Find faculty contact information, office hours, research interests, and expertise areas. Connect with the right professors for your academic needs.
+                  </p>
+                  <div className="text-green-600 dark:text-green-400 text-sm font-medium">
+                    Explore directory →
+                  </div>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold">For Everyone</h3>
-              <p className="text-muted-foreground">
-                Helping students, faculty, and staff find information quickly
-              </p>
+            </div>
+
+            {/* Access CCS Knowledge Base */}
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold text-blue-900 dark:text-blue-100">Access CCS Knowledge Base</h3>
+                  <p className="text-blue-700 dark:text-blue-300 text-sm leading-relaxed">
+                    Explore our comprehensive database of academic resources, course materials, research papers, and institutional knowledge curated for CCS students.
+                  </p>
+                  <div className="text-blue-600 dark:text-blue-400 text-sm font-medium">
+                    Browse knowledge →
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
