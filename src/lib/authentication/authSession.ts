@@ -1,4 +1,6 @@
 import { account } from '../appwrite';
+import { OAuthProvider } from 'appwrite';
+import { ROUTES } from '../constants';
 
 // User interface
 export interface User {
@@ -73,5 +75,69 @@ export const getCurrentUser = async (): Promise<User | null> => {
     return user as User;
   } catch {
     return null;
+  }
+};
+
+// Google OAuth2 Authentication
+export const initiateGoogleAuth = (): void => {
+  const currentUrl = window.location.origin;
+  const successUrl = `${currentUrl}${ROUTES.DASHBOARD}`;
+  const failureUrl = `${currentUrl}${ROUTES.LOGIN}?error=auth_failed`;
+
+  // Initiate Google OAuth2 session
+  account.createOAuth2Session({
+    provider: OAuthProvider.Google,
+    success: successUrl,
+    failure: failureUrl
+  });
+};
+
+// Check if returning from OAuth flow and handle session
+export const handleOAuthCallback = async (): Promise<{ success: boolean; user?: User; error?: string }> => {
+  try {
+    // Check if we have a valid session after OAuth
+    const user = await account.get();
+    
+    return {
+      success: true,
+      user: user as User
+    };
+  } catch (error: unknown) {
+    const appwriteError = error as { message?: string; code?: number };
+    
+    return {
+      success: false,
+      error: appwriteError.message || 'OAuth authentication failed'
+    };
+  }
+};
+
+// Complete Google authentication flow
+export const authenticateWithGoogle = async (): Promise<{ success: boolean; user?: User; error?: string }> => {
+  try {
+    // Check if user is already authenticated
+    const existingUser = await getCurrentUser();
+    if (existingUser) {
+      return {
+        success: true,
+        user: existingUser
+      };
+    }
+
+    // If not authenticated, initiate OAuth flow
+    initiateGoogleAuth();
+    
+    // This will redirect, so we return a pending state
+    return {
+      success: false,
+      error: 'Redirecting to Google authentication...'
+    };
+  } catch (error: unknown) {
+    const appwriteError = error as { message?: string };
+    
+    return {
+      success: false,
+      error: appwriteError.message || 'Failed to initiate Google authentication'
+    };
   }
 };

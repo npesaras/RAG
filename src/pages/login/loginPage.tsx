@@ -2,6 +2,9 @@ import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router"
 import { ROUTES } from "@/lib/constants"
 import { useAuthSession } from "@/hooks/useAuthSession"
+import { authenticateWithGoogle } from "@/lib/authentication/authSession"
+import { handleUserAfterAuth } from "@/lib/authentication/userService"
+import { useState } from "react"
 import communicationSvg from "@/assets/communication.svg"
 
 // Google Icon Component
@@ -29,15 +32,39 @@ const GoogleIcon = () => (
 // Login Page Component
 export default function LoginPage() {
   const navigate = useNavigate()
+  const [isAuthenticating, setIsAuthenticating] = useState(false)
+  const [authError, setAuthError] = useState<string | null>(null)
   
   // Check authentication session - redirect to dashboard if already logged in
   const { loading } = useAuthSession(true)
 
   const handleGoogleLogin = async () => {
-    // TODO: Implement Google authentication
-    console.log("Google login clicked")
-    // For now, navigate directly to dashboard
-    navigate(ROUTES.DASHBOARD)
+    try {
+      setIsAuthenticating(true)
+      setAuthError(null)
+      
+      // Initiate Google authentication
+      const authResult = await authenticateWithGoogle()
+      
+      if (authResult.success && authResult.user) {
+        // User is already authenticated, save profile and redirect
+        const userResult = await handleUserAfterAuth()
+        
+        if (userResult.success) {
+          navigate(ROUTES.DASHBOARD)
+        } else {
+          setAuthError(userResult.error || 'Failed to save user profile')
+        }
+      } else {
+        // This will redirect to Google OAuth, so we don't need to handle the "redirecting" case
+        // The page will reload after OAuth flow
+      }
+    } catch (error) {
+      setAuthError('Authentication failed. Please try again.')
+      console.error('Google authentication error:', error)
+    } finally {
+      setIsAuthenticating(false)
+    }
   }
 
   const handleBackToHome = () => {
@@ -71,14 +98,21 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-4">
+            {authError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                {authError}
+              </div>
+            )}
+            
             <Button 
               onClick={handleGoogleLogin}
               variant="outline"
               size="lg"
               className="w-full h-12 text-base"
+              disabled={isAuthenticating || loading}
             >
               <GoogleIcon />
-              Continue with Google
+              {isAuthenticating ? 'Authenticating...' : 'Continue with Google'}
             </Button>
 
             <Button 
@@ -86,6 +120,7 @@ export default function LoginPage() {
               variant="ghost"
               size="lg"
               className="w-full"
+              disabled={isAuthenticating}
             >
               Back to Home
             </Button>

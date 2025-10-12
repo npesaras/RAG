@@ -25,6 +25,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar"
+import { useOAuthCallback } from "@/hooks/useOAuthCallback"
 
 // Menu items for the sidebar
 const items = [
@@ -71,8 +72,35 @@ const bottomItems = [
 export default function DashboardPage() {
   const location = useLocation()
   
+  // Handle OAuth callback processing
+  const { isProcessing, error } = useOAuthCallback()
+  
   // Get main content based on current route
   const getMainContent = () => {
+    // Show OAuth processing state if needed
+    if (isProcessing) {
+      return (
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="text-lg font-medium">Setting up your account...</div>
+            <div className="text-sm text-muted-foreground mt-2">Please wait while we save your profile.</div>
+          </div>
+        </div>
+      )
+    }
+
+    // Show OAuth error if any
+    if (error) {
+      return (
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="text-lg font-medium text-red-600">Authentication Error</div>
+            <div className="text-sm text-muted-foreground mt-2">{error}</div>
+          </div>
+        </div>
+      )
+    }
+
     switch (location.pathname) {
       case ROUTES.ARTICLES:
         return (
