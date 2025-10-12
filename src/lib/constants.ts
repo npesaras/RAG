@@ -8,4 +8,5 @@ export const ROUTES = {
   CHATBOT: '/dashboard/chatbot',
   PROSPECTUS: '/dashboard/prospectus',
   DIRECTORY: '/dashboard/directory',
+  PROFILE: '/dashboard/profile',
 } as const

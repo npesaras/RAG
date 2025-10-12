@@ -18,7 +18,10 @@ interface UseAppwriteAuthReturn {
     signInWithGoogle: () => Promise<void>;
     signOut: () => Promise<void>;
     clearError: () => void;
+    refreshUser: () => Promise<void>;
 }
+
+const DEBUG = import.meta.env.DEV; // Only log in development
 
 export const useAppwriteAuth = (redirectToDashboard = false): UseAppwriteAuthReturn => {
     const [user, setUser] = useState<AppwriteUser | null>(null);
@@ -29,118 +32,87 @@ export const useAppwriteAuth = (redirectToDashboard = false): UseAppwriteAuthRet
 
     const ensureUserDocument = useCallback(async (authUser: AppwriteUser) => {
         try {
-            console.log('🔍 Starting ensureUserDocument for:', {
-                id: authUser.$id,
-                email: authUser.email,
-                name: authUser.name,
-                fullUser: authUser
-            });
+            if (DEBUG) console.log('Ensuring user document exists for:', authUser.email);
             
-            // Check if user document exists by email
             const existingUser = await getUserByEmail(authUser.email);
-            console.log('📋 Existing user check result:', existingUser);
             
             if (!existingUser.success) {
-                console.log('📝 Creating new user document with ID:', authUser.$id);
-                // Create user document with the authenticated user's ID
+                if (DEBUG) console.log('Creating new user document');
+                
                 const userData = {
                     name: authUser.name || authUser.email?.split('@')[0] || 'User',
                     email: authUser.email
                 };
                 
-                console.log('📊 User data to create:', userData);
                 const createResult = await createUserDocument(userData, authUser.$id);
-                console.log('💾 Create result:', createResult);
                 
-                if (createResult.success) {
-                    console.log('✅ User document created successfully with ID:', authUser.$id);
-                } else {
-                    console.error('❌ Failed to create user document:', createResult.error);
+                if (!createResult.success) {
+                    console.error('Failed to create user document:', createResult.error);
                 }
-            } else {
-                console.log('✅ User document already exists:', existingUser.user);
             }
         } catch (err) {
-            console.error('💥 Error ensuring user document:', err);
+            console.error('Error ensuring user document:', err);
         }
     }, []);
 
     const checkAuth = useCallback(async () => {
         try {
-            console.log('🔄 Checking authentication status...');
+            setError(null);
+            if (DEBUG) console.log('Checking authentication...');
             
-            // Use getCurrentUser for direct auth check
             const userResult = await getCurrentUser();
-            console.log('🔍 getCurrentUser result:', userResult);
             
             if (userResult.success && userResult.user) {
-                console.log('✅ User is authenticated:', {
-                    email: userResult.user.email,
-                    id: userResult.user.$id,
-                    name: userResult.user.name
-                });
-                setUser(userResult.user);
+                if (DEBUG) console.log('User authenticated:', userResult.user.email);
                 
-                // Ensure user document exists in database
-                console.log('🔗 Calling ensureUserDocument...');
+                setUser(userResult.user);
                 await ensureUserDocument(userResult.user);
                 
+                // Redirect if needed
                 if (redirectToDashboard && location.pathname === '/login') {
-                    console.log('🚀 Redirecting to dashboard...');
                     navigate(ROUTES.DASHBOARD);
                 }
             } else {
-                console.log('❌ User is not authenticated:', userResult);
+                if (DEBUG) console.log('User not authenticated');
                 setUser(null);
             }
         } catch (err) {
-            console.error('💥 Auth check error:', err);
+            console.error('Auth check failed:', err);
             setUser(null);
+            setError(err instanceof Error ? err.message : 'Authentication check failed');
         } finally {
             setLoading(false);
         }
     }, [redirectToDashboard, navigate, location.pathname, ensureUserDocument]);
 
-    // Check for OAuth callback and initial auth
+    // Handle OAuth callback and initial auth check
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
-        const userId = urlParams.get('userId');
-        const secret = urlParams.get('secret');
+        const isOAuthCallback = urlParams.has('userId') && urlParams.has('secret');
         
-        if (userId && secret) {
-            console.log('🔗 OAuth callback detected, checking auth...');
-            // Small delay to ensure OAuth session is established
+        if (isOAuthCallback) {
+            if (DEBUG) console.log('OAuth callback detected');
+            // Slight delay for OAuth session establishment
             setTimeout(checkAuth, 1000);
         } else {
             checkAuth();
         }
     }, [checkAuth, location.search]);
 
-    // Set up periodic auth checking for non-authenticated users
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (!user) {
-                checkAuth();
-            }
-        }, 30000); // Check every 30 seconds if not authenticated
-        
-        return () => clearInterval(interval);
-    }, [checkAuth, user]);
-
     const signInWithGoogle = async () => {
         try {
             setLoading(true);
             setError(null);
-            console.log('🚀 Starting Google OAuth...');
+            if (DEBUG) console.log('Starting Google OAuth...');
             
             const result = await createOAuthSession('google');
             if (!result.success) {
                 setError(result.error || 'OAuth failed');
-                console.error('❌ OAuth failed:', result.error);
             }
         } catch (err) {
-            console.error('💥 Google sign in error:', err);
-            setError(err instanceof Error ? err.message : 'Sign in failed');
+            const errorMessage = err instanceof Error ? err.message : 'Sign in failed';
+            console.error('Google sign in error:', errorMessage);
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -150,28 +122,39 @@ export const useAppwriteAuth = (redirectToDashboard = false): UseAppwriteAuthRet
         try {
             setLoading(true);
             setError(null);
-            console.log('🚪 Signing out...');
+            if (DEBUG) console.log('Signing out...');
             
             const result = await logout();
             
             if (result.success) {
                 setUser(null);
-                console.log('✅ Successfully signed out');
-                navigate(ROUTES.HOME);
+                navigate(ROUTES.LOGIN);
             } else {
                 setError(result.error || 'Sign out failed');
-                console.error('❌ Sign out failed:', result.error);
             }
         } catch (err) {
-            console.error('💥 Sign out error:', err);
-            setError(err instanceof Error ? err.message : 'Sign out failed');
+            const errorMessage = err instanceof Error ? err.message : 'Sign out failed';
+            console.error('Sign out error:', errorMessage);
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
     };
 
-    const clearError = () => {
-        setError(null);
+    const clearError = () => setError(null);
+
+    const refreshUser = async () => {
+        try {
+            if (DEBUG) console.log('Refreshing user data...');
+            const userResult = await getCurrentUser();
+            
+            if (userResult.success && userResult.user) {
+                setUser(userResult.user);
+                if (DEBUG) console.log('User data refreshed:', userResult.user.email);
+            }
+        } catch (err) {
+            console.error('Error refreshing user data:', err);
+        }
     };
 
     return {
@@ -181,6 +164,7 @@ export const useAppwriteAuth = (redirectToDashboard = false): UseAppwriteAuthRet
         isAuthenticated: !!user,
         signInWithGoogle,
         signOut,
-        clearError
+        clearError,
+        refreshUser
     };
 };

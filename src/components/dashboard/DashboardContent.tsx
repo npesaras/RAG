@@ -1,6 +1,7 @@
 import { useLocation } from "react-router"
 import { ROUTES } from "@/lib/constants"
 import { DashboardOverview } from "./DashboardOverview"
+import { ProfileSettings } from "./ProfileSettings"
 
 export function DashboardContent() {
   const location = useLocation()
@@ -52,8 +53,14 @@ export function DashboardContent() {
             </div>
           </div>
         )
+      case ROUTES.PROFILE:
+        return <ProfileSettings />
       default:
-        return <DashboardOverview />
+        return (
+          <div className="space-y-6">
+            <DashboardOverview />
+          </div>
+        )
     }
   }
 

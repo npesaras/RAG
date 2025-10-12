@@ -5,7 +5,6 @@ import {
   GraduationCap,
   FolderOpen,
   Settings,
-  HelpCircle,
 } from "lucide-react"
 import { useLocation } from "react-router"
 
@@ -22,6 +21,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { UserAccountDropdown } from "./UserAccountDropdown"
 
 // Menu items for the sidebar
 const navigationItems = [
@@ -50,18 +50,10 @@ const navigationItems = [
     url: ROUTES.DIRECTORY,
     icon: FolderOpen,
   },
-]
-
-const bottomItems = [
   {
     title: "Settings",
     url: "/settings",
     icon: Settings,
-  },
-  {
-    title: "Help",
-    url: "/help",
-    icon: HelpCircle,
   },
 ]
 
@@ -112,16 +104,9 @@ export function SidebarNavigation() {
       
       <SidebarFooter className="border-t border-sidebar-border">
         <SidebarMenu>
-          {bottomItems.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild size="lg">
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          <SidebarMenuItem>
+            <UserAccountDropdown />
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
