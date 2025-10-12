@@ -17,6 +17,7 @@ function App() {
       <Route path={ROUTES.CHATBOT} element={<DashboardPage />} />
       <Route path={ROUTES.PROSPECTUS} element={<DashboardPage />} />
       <Route path={ROUTES.DIRECTORY} element={<DashboardPage />} />
+      <Route path={ROUTES.PROFILE} element={<DashboardPage />} />
     </Routes>
   )
 }

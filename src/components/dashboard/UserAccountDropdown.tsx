@@ -1,4 +1,4 @@
-import { Settings, LogOut, User } from "lucide-react"
+import { Settings, LogOut } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -10,12 +10,17 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { SidebarMenuButton } from "@/components/ui/sidebar"
 import { useAppwriteAuth } from "@/hooks/useAppwriteAuth"
+import { useUserProfile } from "@/hooks/useUserProfile"
+import { ROUTES } from "@/lib/constants"
+import { useNavigate } from "react-router"
 
 export function UserAccountDropdown() {
-  const { user, signOut, loading, isAuthenticated } = useAppwriteAuth()
+  const { user, signOut, loading } = useAppwriteAuth()
+  const { displayName, refreshTrigger } = useUserProfile()
+  const navigate = useNavigate()
 
-  // Debug: Always show something to help troubleshoot
-  console.log('UserAccountDropdown - Debug:', { user, loading, isAuthenticated })
+  // Debug log to track updates
+  console.log('UserAccountDropdown render - displayName:', displayName, 'refreshTrigger:', refreshTrigger)
 
   if (loading) {
     return (
@@ -32,7 +37,7 @@ export function UserAccountDropdown() {
     return (
       <SidebarMenuButton size="lg" className="w-full justify-start">
         <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
-          <User className="h-4 w-4 text-muted-foreground" />
+          <Settings className="h-4 w-4 text-muted-foreground" />
         </div>
         <div className="grid flex-1 text-left text-sm leading-tight">
           <span className="truncate text-muted-foreground">Not logged in</span>
@@ -56,8 +61,7 @@ export function UserAccountDropdown() {
   }
 
   const handleProfileSettings = () => {
-    // Navigate to profile settings page
-    console.log("Navigate to profile settings")
+    navigate(ROUTES.PROFILE)
   }
 
   return (
@@ -69,11 +73,11 @@ export function UserAccountDropdown() {
         >
           <Avatar className="h-8 w-8">
             <AvatarFallback className="bg-primary text-primary-foreground">
-              {getInitials(user.name || user.email)}
+              {getInitials(displayName || user?.email || 'User')}
             </AvatarFallback>
           </Avatar>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold">{user.name || 'User'}</span>
+            <span className="truncate font-semibold">{displayName}</span>
             <span className="truncate text-xs text-muted-foreground">
               {user.email}
             </span>
@@ -88,7 +92,7 @@ export function UserAccountDropdown() {
       >
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user.name || 'User'}</p>
+            <p className="text-sm font-medium leading-none">{displayName}</p>
             <p className="text-xs leading-none text-muted-foreground">
               {user.email}
             </p>
@@ -96,12 +100,8 @@ export function UserAccountDropdown() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleProfileSettings} className="cursor-pointer">
-          <User className="mr-2 h-4 w-4" />
-          <span>My Account</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleProfileSettings} className="cursor-pointer">
           <Settings className="mr-2 h-4 w-4" />
-          <span>Profile Settings</span>
+          <span>Account Settings</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
