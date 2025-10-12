@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router"
 import { ROUTES } from "@/lib/constants"
-import { useState } from "react"
 import communicationSvg from "@/assets/communication.svg"
+import { useAppwriteAuth } from "@/hooks/useAppwriteAuth"
 
 // Google Icon Component
 const GoogleIcon = () => (
@@ -29,15 +29,24 @@ const GoogleIcon = () => (
 // Login Page Component
 export default function LoginPage() {
   const navigate = useNavigate()
-  const [authError, setAuthError] = useState<string | null>(null)
+  const { signInWithGoogle, loading, error, clearError } = useAppwriteAuth(true)
 
-  const handleLogin = async () => {
-    // TODO: Implement authentication logic
-    setAuthError('Authentication not yet implemented')
+  const handleGoogleLogin = async () => {
+    clearError()
+    await signInWithGoogle()
   }
 
   const handleBackToHome = () => {
     navigate(ROUTES.HOME)
+  }
+
+  // Show loading while checking session
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    )
   }
 
   // If user is authenticated, they will be redirected by the hook
@@ -56,20 +65,21 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-4">
-            {authError && (
+            {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                {authError}
+                {error}
               </div>
             )}
             
             <Button 
-              onClick={handleLogin}
+              onClick={handleGoogleLogin}
               variant="outline"
               size="lg"
               className="w-full h-12 text-base"
+              disabled={loading}
             >
               <GoogleIcon />
-              Continue with Google
+              {loading ? 'Signing in...' : 'Continue with Google'}
             </Button>
 
             <Button 
