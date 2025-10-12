@@ -13,6 +13,10 @@ function App() {
       <Route path={ROUTES.LOGIN} element={<LoginPage />} />
       <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
       <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
+      <Route path={ROUTES.ARTICLES} element={<DashboardPage />} />
+      <Route path={ROUTES.CHATBOT} element={<DashboardPage />} />
+      <Route path={ROUTES.PROSPECTUS} element={<DashboardPage />} />
+      <Route path={ROUTES.DIRECTORY} element={<DashboardPage />} />
     </Routes>
   )
 }
