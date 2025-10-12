@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router"
 import { ROUTES } from "@/lib/constants"
-import { useAuth } from "@/hooks/use-auth"
 import communicationSvg from "@/assets/communication.svg"
 
 // Google Icon Component
@@ -29,32 +28,12 @@ const GoogleIcon = () => (
 // Login Page Component
 export default function LoginPage() {
   const navigate = useNavigate()
-  const { login, isLoading, clearError } = useAuth()
 
   const handleGoogleLogin = async () => {
-    try {
-      // Clear any previous errors
-      clearError()
-      
-      console.log("Starting Google authentication process...")
-      
-      const result = await login()
-      
-      if (!result.success) {
-        console.error("Authentication failed:", result.error)
-        // Show error to user and don't redirect
-        alert(`Authentication failed: ${result.error}`)
-        return
-      }
-
-      // Note: login() redirects to Google OAuth page
-      // User will be redirected to dashboard on success
-      // or back to login page on failure
-      
-    } catch (error) {
-      console.error("Unexpected error during authentication:", error)
-      // isLoading will be automatically set to false by the useAuth hook
-    }
+    // TODO: Implement Google authentication
+    console.log("Google login clicked")
+    // For now, navigate directly to dashboard
+    navigate(ROUTES.DASHBOARD)
   }
 
   const handleBackToHome = () => {
@@ -79,10 +58,9 @@ export default function LoginPage() {
               variant="outline"
               size="lg"
               className="w-full h-12 text-base"
-              disabled={isLoading}
             >
               <GoogleIcon />
-              {isLoading ? "Connecting..." : "Continue with Google"}
+              Continue with Google
             </Button>
 
             <Button 
