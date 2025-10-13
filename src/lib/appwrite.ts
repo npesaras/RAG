@@ -62,13 +62,47 @@ export const createOAuthSession = async (
             apple: OAuthProvider.Apple,
         } as const;
 
+        // Ensure absolute HTTPS URLs for production
+        const getAbsoluteUrl = (path: string) => {
+            const origin = window.location.origin;
+            // Ensure HTTPS for production deployments
+            const httpsOrigin = origin.replace(/^http:/, 'https:');
+            return `${httpsOrigin}${path}`;
+        };
+
+        const defaultSuccessUrl = successUrl || getAbsoluteUrl('/dashboard');
+        const defaultFailureUrl = failureUrl || getAbsoluteUrl('/login');
+
+        console.log('OAuth Configuration:', { 
+            provider,
+            success: defaultSuccessUrl, 
+            failure: defaultFailureUrl,
+            origin: window.location.origin,
+            href: window.location.href,
+            hostname: window.location.hostname
+        });
+
+        // Add validation for URLs
+        if (!defaultSuccessUrl.startsWith('https://') && !defaultSuccessUrl.startsWith('http://localhost')) {
+            throw new Error(`Invalid success URL: ${defaultSuccessUrl}`);
+        }
+        
+        if (!defaultFailureUrl.startsWith('https://') && !defaultFailureUrl.startsWith('http://localhost')) {
+            throw new Error(`Invalid failure URL: ${defaultFailureUrl}`);
+        }
+
+        console.log('Creating OAuth session with validated URLs...');
+
         await account.createOAuth2Session(
             providerMap[provider],
-            successUrl || `${window.location.origin}/dashboard`,
-            failureUrl || `${window.location.origin}/login`
+            defaultSuccessUrl,
+            defaultFailureUrl
         );
+        
+        console.log('OAuth session created successfully');
         return { success: true as const };
     } catch (error) {
+        console.error('OAuth session creation failed:', error);
         return handleError(error);
     }
 };

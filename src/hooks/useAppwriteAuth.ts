@@ -107,7 +107,10 @@ export const useAppwriteAuth = (redirectToDashboard = false): UseAppwriteAuthRet
             
             const result = await createOAuthSession('google');
             if (!result.success) {
+                console.error('OAuth failed with error:', result.error);
                 setError(result.error || 'OAuth failed');
+            } else {
+                console.log('OAuth session created, should redirect to Google...');
             }
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Sign in failed';
