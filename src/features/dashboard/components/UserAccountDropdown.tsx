@@ -1,5 +1,5 @@
-import { Settings, LogOut } from "lucide-react"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Settings, LogOut } from 'lucide-react'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,15 +7,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { SidebarMenuButton } from "@/components/ui/sidebar"
-import { useAppwriteAuth } from "@/hooks/useAppwriteAuth"
-import { useUserProfile } from "@/hooks/useUserProfile"
-import { ROUTES } from "@/lib/constants"
-import { useNavigate } from "react-router"
+} from '@/components/ui/dropdown-menu'
+import { SidebarMenuButton } from '@/components/ui/sidebar'
+import { useAuth } from '@/features/auth/hooks/useAuth'
+import { useUserProfile } from '@/features/user/hooks/useUserProfile'
+import { ROUTES } from '@/lib/constants'
+import { useNavigate } from 'react-router'
 
 export function UserAccountDropdown() {
-  const { user, signOut, loading } = useAppwriteAuth()
+  const { user, signOut, loading } = useAuth()
   const { displayName, refreshTrigger } = useUserProfile()
   const navigate = useNavigate()
 

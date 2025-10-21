@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react"
+import { useNavigate } from "react-router"
 
 interface QuickAccessCardProps {
   title: string
@@ -19,10 +20,16 @@ export function QuickAccessCard({
   href, 
   actionText 
 }: QuickAccessCardProps) {
+  const navigate = useNavigate()
+
+  const handleClick = () => {
+    navigate(href)
+  }
+
   return (
     <div 
       className="group cursor-pointer rounded-xl border bg-card p-6"
-      onClick={() => window.location.href = href}
+      onClick={handleClick}
     >
       <div className="space-y-4">
         <div className={`h-32 ${gradient} rounded-lg flex items-center justify-center`}>

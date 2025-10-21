@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useAppwriteAuth } from '@/hooks/useAppwriteAuth'
-import { updateUserDocument, getUserByEmail } from '@/lib/appwrite'
-import { triggerProfileRefresh } from '@/hooks/useUserProfile'
+import { useAuth } from '@/features/auth/hooks/useAuth'
+import { updateUserDocument, getUserByEmail } from '@/features/user/api/user-profile'
+import { triggerProfileRefresh } from '@/features/user/hooks/useUserProfile'
 
 export function ProfileSettings() {
-  const { user, refreshUser } = useAppwriteAuth()
+  const { user, refreshUser } = useAuth()
   
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')

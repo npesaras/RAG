@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router'
-import LandingPage from './pages/landing/landingPage'
-import LoginPage from './pages/login/loginPage'
-import OnboardingPage from './pages/onboarding/onboardingPage'
-import DashboardPage from './pages/dashboard/dashboardPage'
-import { ROUTES } from './lib/constants'
-import './styles/global.css'
+import LandingPage from '@/pages/landing'
+import LoginPage from '@/pages/login'
+import OnboardingPage from '@/pages/onboarding'
+import DashboardPage from '@/pages/dashboard'
+import { ROUTES } from '@/lib/constants'
+import '@/styles/global.css'
 
 function App() {
   return (
