@@ -2,13 +2,15 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { 
     logout, 
-    createOAuthSession,
     getCurrentUser,
-    createUserDocument,
-    getUserByEmail
 } from '@/lib/appwrite';
 import type { AppwriteUser } from '@/lib/appwrite';
 import { ROUTES } from '@/lib/constants';
+import { 
+    signInWithGoogle as googleSignIn,
+    handleGoogleOAuthCallback,
+    isGoogleOAuthCallback
+} from '@/lib/googleAuth';
 
 interface UseAppwriteAuthReturn {
     user: AppwriteUser | null;
@@ -30,31 +32,6 @@ export const useAppwriteAuth = (redirectToDashboard = false): UseAppwriteAuthRet
     const navigate = useNavigate();
     const location = useLocation();
 
-    const ensureUserDocument = useCallback(async (authUser: AppwriteUser) => {
-        try {
-            if (DEBUG) console.log('Ensuring user document exists for:', authUser.email);
-            
-            const existingUser = await getUserByEmail(authUser.email);
-            
-            if (!existingUser.success) {
-                if (DEBUG) console.log('Creating new user document');
-                
-                const userData = {
-                    name: authUser.name || authUser.email?.split('@')[0] || 'User',
-                    email: authUser.email
-                };
-                
-                const createResult = await createUserDocument(userData, authUser.$id);
-                
-                if (!createResult.success) {
-                    console.error('Failed to create user document:', createResult.error);
-                }
-            }
-        } catch (err) {
-            console.error('Error ensuring user document:', err);
-        }
-    }, []);
-
     const checkAuth = useCallback(async () => {
         try {
             setError(null);
@@ -66,7 +43,6 @@ export const useAppwriteAuth = (redirectToDashboard = false): UseAppwriteAuthRet
                 if (DEBUG) console.log('User authenticated:', userResult.user.email);
                 
                 setUser(userResult.user);
-                await ensureUserDocument(userResult.user);
                 
                 // Redirect if needed
                 if (redirectToDashboard && location.pathname === '/login') {
@@ -83,31 +59,62 @@ export const useAppwriteAuth = (redirectToDashboard = false): UseAppwriteAuthRet
         } finally {
             setLoading(false);
         }
-    }, [redirectToDashboard, navigate, location.pathname, ensureUserDocument]);
+    }, [redirectToDashboard, navigate, location.pathname]);
 
     // Handle OAuth callback and initial auth check
     useEffect(() => {
-        const urlParams = new URLSearchParams(location.search);
-        const isOAuthCallback = urlParams.has('userId') && urlParams.has('secret');
-        
-        if (isOAuthCallback) {
-            if (DEBUG) console.log('OAuth callback detected');
-            // Slight delay for OAuth session establishment
-            setTimeout(checkAuth, 1000);
+        if (isGoogleOAuthCallback()) {
+            if (DEBUG) console.log('OAuth callback detected, handling...');
+            
+            handleGoogleOAuthCallback()
+                .then((result) => {
+                    if (result.success && result.user) {
+                        if (DEBUG) console.log('OAuth callback handled successfully');
+                        setUser(result.user);
+                        setLoading(false);
+                        
+                        // Redirect to dashboard if needed
+                        if (redirectToDashboard) {
+                            navigate(ROUTES.DASHBOARD);
+                        }
+                    } else {
+                        console.error('OAuth callback failed:', result.error);
+                        setError(result.error || 'Authentication failed');
+                        setLoading(false);
+                    }
+                })
+                .catch((err) => {
+                    console.error('OAuth callback error:', err);
+                    setError('Authentication failed. Please try again.');
+                    setLoading(false);
+                });
         } else {
             checkAuth();
         }
-    }, [checkAuth, location.search]);
+    }, [checkAuth, redirectToDashboard, navigate]);
 
     const signInWithGoogle = async () => {
         try {
             setLoading(true);
             setError(null);
-            if (DEBUG) console.log('Starting Google OAuth...');
+            if (DEBUG) console.log('Starting Google sign-in...');
             
-            const result = await createOAuthSession('google');
-            if (!result.success) {
-                setError(result.error || 'OAuth failed');
+            const result = await googleSignIn({
+                onSuccess: (user) => {
+                    if (DEBUG) console.log('Google sign-in successful:', user.email);
+                    setUser(user);
+                    if (redirectToDashboard) {
+                        navigate(ROUTES.DASHBOARD);
+                    }
+                },
+                onError: (error) => {
+                    console.error('Google sign-in error:', error);
+                    setError(error.userMessage);
+                }
+            });
+            
+            if (!result.success && result.error) {
+                setError(result.error.userMessage);
             }
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Sign in failed';

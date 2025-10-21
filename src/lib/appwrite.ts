@@ -49,7 +49,28 @@ export const getCurrentUser = async () => {
     }
 };
 
-export const createOAuthSession = async (
+/**
+ * Create an OAuth2 session with various providers
+ * 
+ * @deprecated For Google OAuth, use `signInWithGoogle` from `@/lib/googleAuth` instead.
+ * This provides better error handling, user document management, and callback handling.
+ * 
+ * This function remains available for other OAuth providers (GitHub, Facebook, Apple).
+ * 
+ * @param provider - OAuth provider: 'google' | 'github' | 'facebook' | 'apple'
+ * @param successUrl - URL to redirect on successful authentication
+ * @param failureUrl - URL to redirect on failed authentication
+ * 
+ * @example
+ * // For Google OAuth (recommended):
+ * import { signInWithGoogle } from '@/lib/googleAuth';
+ * await signInWithGoogle();
+ * 
+ * @example
+ * // For other providers:
+ * await createOAuthSession('github');
+ */
+export const createOAuthSession = async(
     provider: 'google' | 'github' | 'facebook' | 'apple', 
     successUrl?: string, 
     failureUrl?: string
