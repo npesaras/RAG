@@ -35,3 +35,8 @@ ngrok http <your_port>
 
 Make sure you have Docker installed on your machine. You can download it from [Docker's official website](https://www.docker.com/get-started).
 
+To run my N8N docker environment
+```bash
+docker compose up -d
+```
+This command will use my `docker-compose.yml`` file to set up and start the N8N service in detached mode.
