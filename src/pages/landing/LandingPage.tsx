@@ -1,51 +1,31 @@
-import { useRef } from "react"
-import { useNavigate } from "react-router"
-import { ROUTES } from "@/lib/constants"
-import { LandingNavbar } from "./components/LandingNavbar"
-import { LandingHero } from "./components/LandingHero"
-import { FeatureGrid } from "./components/FeatureGrid"
+import { HeroHeader } from "./components/HomePageHeader"
+import HomePageHeroSection from "./components/HomePageHeroSection"
+import FooterSection from "./components/HomePageFooter"
 
 export default function LandingPage() {
-  const navigate = useNavigate()
-  const homeRef = useRef<HTMLElement>(null)
-  const featuresRef = useRef<HTMLDivElement>(null)
-  const contactRef = useRef<HTMLDivElement>(null)
-
-  const handleLoginClick = () => {
-    navigate(ROUTES.LOGIN)
-  }
-
-  const scrollToSection = (sectionId: string) => {
-    const refs = {
-      home: homeRef,
-      features: featuresRef,
-      contact: contactRef,
-    }
-
-    const targetRef = refs[sectionId as keyof typeof refs]
-    if (targetRef?.current) {
-      targetRef.current.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
-
   return (
-    <div className="min-h-screen bg-background">
-      <LandingNavbar 
-        onLoginClick={handleLoginClick}
-        onScrollToSection={scrollToSection}
+    <div className="relative w-full bg-white">
+      {/* Improved Dreamy Sky Gradient - Fixed to cover entire page */}
+      <div
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at 30% 70%, rgba(173, 216, 230, 0.25), transparent 50%),
+            radial-gradient(circle at 70% 30%, rgba(255, 182, 193, 0.3), transparent 50%),
+            radial-gradient(circle at 50% 50%, rgba(240, 240, 255, 0.4), transparent 70%)`,
+        }}
       />
 
-      <main ref={homeRef} className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto text-center space-y-8">
-          <LandingHero onGetStartedClick={handleLoginClick} />
-          <div ref={featuresRef}>
-            <FeatureGrid />
-          </div>
-        </div>
-      </main>
+      {/* Content */}
+      <div className="relative z-10">
+        <HeroHeader />
 
-      {/* Footer */}
-      <div ref={contactRef} />
+        {/* Hero Section */}
+        <HomePageHeroSection />
+
+        {/* Footer Section - Lazy Loaded */}
+        <FooterSection />
+      </div>
     </div>
   )
 }
