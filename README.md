@@ -1,42 +1,36 @@
-# Wolfie: Web-based Retrieval Augemented Generation (RAG) Application
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-This repository contains a web-based Retrieval-Augmented Generation (RAG) application developed for the College of Computer Studies at Mindanao State University – Iligan Institute of Technology (MSU‑IIT).
+## Getting Started
 
-## Environment Setup
+First, run the development server:
 
-To run this repository locally without any issues, we need to setup the following environment:
-
-1. Node.js (v20.x.x or later)
-2. npm (v9.x.x or later)
-3. Ngrok (for exposing local server to the internet)
-4. Docker (for containerization)
-5. N8N (for workflow automation)
-
-### Ngrok setup and configuration
-
-Ngrok setup and configuration
-
-Using snap package manager to install ngrok
 ```bash
-snap install ngrok
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Authenticate your ngrok installation with your auth token
-```bash
-ngrok config add-authtoken <your_auth_token>
-```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Deploy ngrok on port <your_port>
-```bash
-ngrok http <your_port>
-```
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-### Docker setup and configuration
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-Make sure you have Docker installed on your machine. You can download it from [Docker's official website](https://www.docker.com/get-started).
+## Learn More
 
-To run my N8N docker environment
-```bash
-docker compose up -d
-```
-This command will use my `docker-compose.yml`` file to set up and start the N8N service in detached mode.
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
